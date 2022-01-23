@@ -7,6 +7,20 @@
     <groupId>org.example</groupId>
     <artifactId>SparkLRASR</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.ujmp/ujmp-jmatio -->
+        <dependency>
+            <groupId>org.ujmp</groupId>
+            <artifactId>ujmp-jmatio</artifactId>
+            <version>0.3.0</version>
+        </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.ujmp/ujmp-core -->
+        <dependency>
+            <groupId>org.ujmp</groupId>
+            <artifactId>ujmp-core</artifactId>
+            <version>0.3.0</version>
+        </dependency>
+    </dependencies>
 
 </project>
