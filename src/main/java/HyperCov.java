@@ -1,10 +1,10 @@
 import Jama.Matrix;
 
-public class hyperCov {
+public class HyperCov {
     double [][]M;
     int p; //æÿ’Û––£¨bands
     int N; //æÿ’Û¡–£¨pixels
-    public hyperCov(double[][] m) {
+    public HyperCov(double[][] m) {
         this.M = m;
     }
 
