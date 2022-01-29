@@ -205,10 +205,12 @@ public class Kmeans {
     }
 
     //进行Kmeans
-    public Set<Cluster> run(){
-        //封装Point
+    public int[] run(){
         bands= X.length;
         pixelNum=X[0].length;
+        //每个像素ID对应的类别
+        int[]K1=new int[pixelNum];
+
         initData();
         Set<Cluster> clusterSet = initClusterCenter();
         boolean ifNeedIter= true;
@@ -217,7 +219,13 @@ public class Kmeans {
             ifNeedIter= updateCluster(clusterSet);
             iterRunTimes++;
         }
-        return clusterSet;
+        for(Cluster cluster:clusterSet){
+           List<Point> clustermembers= cluster.members;
+           for(Point point:clustermembers){
+               K1[point.pointId]=point.clusterId;
+           }
+        }
+        return K1;
     }
 
     public int getIterTimes(){
