@@ -16,7 +16,7 @@ public class HyperCov {
         this.N= M[0].length;
         C=new double[p][p];
         u=new double[p][1];
-        meanMinusM=new double[p][p];
+        meanMinusM=new double[p][N];
         for(int i=0;i<p;i++){
             double sumDim=0;
             double ave;

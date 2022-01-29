@@ -8,7 +8,7 @@ public class RxDetector {
         this.M = m;
     }
 
-    public double[][] run(){
+    public double[] run(){
         double[][] u;
         double[][] meanMinusM;
         double[][] sigma;
@@ -18,7 +18,7 @@ public class RxDetector {
         this.p= M.length;
         this.N= M[0].length;
         u=new double[p][1];
-        meanMinusM=new double[p][p];
+        meanMinusM=new double[p][N];
         for(int i=0;i<p;i++){
             double sumDim=0;
             double ave;
@@ -67,6 +67,10 @@ public class RxDetector {
             absResult[i][0]=Math.abs(result[i][0]);
         }
 
-        return result;
+        double[] transResult= new double[N];
+        for(int i=0;i<N;i++){
+            transResult[i]=absResult[i][0];
+        }
+        return transResult;
     }
 }
