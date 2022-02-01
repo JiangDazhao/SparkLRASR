@@ -7,7 +7,18 @@
     <groupId>org.example</groupId>
     <artifactId>SparkLRASR</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <scala.version>2.11.0</scala.version>
+        <spark.version>2.1.1</spark.version>
+        <hadoop.version>2.7.3</hadoop.version>
+        <encoding>UTF-8</encoding>
+    </properties>
+
     <dependencies>
+
         <!-- https://mvnrepository.com/artifact/org.ujmp/ujmp-jmatio -->
         <dependency>
             <groupId>org.ujmp</groupId>
@@ -27,6 +38,13 @@
             <groupId>gov.nist.math</groupId>
             <artifactId>jama</artifactId>
             <version>1.0.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
         </dependency>
 
     </dependencies>

@@ -20,7 +20,7 @@ public class RxDetector {
         u=new double[p][1];
         meanMinusM=new double[p][N];
         for(int i=0;i<p;i++){
-            double sumDim=0;
+            double sumDim=0.0;
             double ave;
             for(int j=0;j<N;j++){
                 sumDim+=M[i][j];
