@@ -45,6 +45,7 @@ public class RxDetector {
         Matrix eyeMatrix= Matrix.identity(p,p);
         Matrix sigmaMatrix= new Matrix(sigma);
         Matrix invTemp= sigmaMatrix.plus(eyeMatrix.times(delta));
+        // have some problems
         Matrix sigmaInvMatrix= invTemp.inverse();
 //        for(int i=0;i<sigmaInvMatrix.getRowDimension();i++){
 //            for(int j=0;j<sigmaInvMatrix.getColumnDimension();j++){
