@@ -6,7 +6,7 @@ public class testDicCon {
     public static void main(String[] args) throws IOException {
         int K=15;
         int P=20;
-        Data data = new Data("img2D.mat");
+        Data data = new Data("img2D.mat","UGt.mat");
         double[][] res;
         DicCon dicCon= new DicCon(data.img2D,K,P);
         res=dicCon.run();

@@ -26,6 +26,7 @@ M = M(1:80,189:288,:);
 %M(1,2,:)
 % load Ground Truth
 load UGt.mat
+%GT=80*100
 GT=UGt;
 
 

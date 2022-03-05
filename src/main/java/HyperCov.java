@@ -2,8 +2,8 @@ import Jama.Matrix;
 
 public class HyperCov {
     double [][]M;
-    int p; //¾ØÕóĞĞ£¬bands
-    int N; //¾ØÕóÁĞ£¬pixels
+    int p; //çŸ©é˜µè¡Œï¼Œbands
+    int N; //çŸ©é˜µåˆ—ï¼Œpixels
     public HyperCov(double[][] m) {
         this.M = m;
     }

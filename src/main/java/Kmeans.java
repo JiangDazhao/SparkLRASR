@@ -1,12 +1,12 @@
 import java.util.*;
 
 public class Kmeans {
-    private double[][] X;//Ô­Ê¼ÊäÈëÊı¾İ
-    private int K; //´ØµÄ¸öÊı
-    private int iterMaxTimes=10000; //µ¥´Îµü´ú×î´óÔËĞĞ´ÎÊı
-    private int iterRunTimes=0; //µ¥´Îµü´úÊµ¼ÊÔËĞĞ´ÎÊı
-    private double disDiff=0.01; //µ¥´Îµü´úÖÕÖ¹Ìõ¼ş£¬Á½´ÎÔËĞĞÖĞÀàÖĞĞÄµÄ¾àÀë²î
-    private static List<Point> pointList= null; //ÓÃÓÚ´æÔ­Ê¼Êı¾İ¹¹³ÉµÄµã¼¯
+    private double[][] X;//åŸå§‹è¾“å…¥æ•°æ®
+    private int K; //ç°‡çš„ä¸ªæ•°
+    private int iterMaxTimes=10000; //å•æ¬¡è¿­ä»£æœ€å¤§è¿è¡Œæ¬¡æ•°
+    private int iterRunTimes=0; //å•æ¬¡è¿­ä»£å®é™…è¿è¡Œæ¬¡æ•°
+    private double disDiff=0.01; //å•æ¬¡è¿­ä»£ç»ˆæ­¢æ¡ä»¶ï¼Œä¸¤æ¬¡è¿è¡Œä¸­ç±»ä¸­å¿ƒçš„è·ç¦»å·®
+    private static List<Point> pointList= null; //ç”¨äºå­˜åŸå§‹æ•°æ®æ„æˆçš„ç‚¹é›†
     private DistanceCompute disC= new DistanceCompute();
     private int bands;
     private int pixelNum;
@@ -17,10 +17,10 @@ public class Kmeans {
     }
 
     public class Point{
-        public int pointId; //×ø±êĞòºÅ
-        public int clusterId; //±êÊ¶ËùÊôÀà
-        public double dist; //±êÊ¶ºÍËùÊôÀàÖĞĞÄµÄ¾àÀë
-        public double[] localArray; //×ø±ê
+        public int pointId; //åæ ‡åºå·
+        public int clusterId; //æ ‡è¯†æ‰€å±ç±»
+        public double dist; //æ ‡è¯†å’Œæ‰€å±ç±»ä¸­å¿ƒçš„è·ç¦»
+        public double[] localArray; //åæ ‡
 
         public Point(int pointId, int clusterId, double dist, double[] localArray) {
             this.pointId = pointId;
@@ -32,7 +32,7 @@ public class Kmeans {
             this.pointId=-1;
             this.localArray=localArray;
         }
-        //ÓÃÓÚÖ®ºóµÄËæ»ú»¯ÖØ¸´ÅĞ¶Ï
+        //ç”¨äºä¹‹åçš„éšæœºåŒ–é‡å¤åˆ¤æ–­
         public boolean equals(Object obj){
             if (obj == null || getClass() != obj.getClass())
                 return false;
@@ -99,7 +99,7 @@ public class Kmeans {
     }
 
     /*
-    ³õÊ¼»¯Êı¾İ¼¯£¬°ÑÊı×é×ª»¯ÎªPointÀàĞÍ
+    åˆå§‹åŒ–æ•°æ®é›†ï¼ŒæŠŠæ•°ç»„è½¬åŒ–ä¸ºPointç±»å‹
      */
     public void initData(){
         pointList= new ArrayList<Point>();
@@ -115,14 +115,14 @@ public class Kmeans {
     }
 
     /*
-    ³õÊ¼»¯´ØÖĞĞÄ
+    åˆå§‹åŒ–ç°‡ä¸­å¿ƒ
      */
     public Set<Cluster> initClusterCenter(){
         Set<Cluster>clusterSet= new HashSet<Cluster>();
         Random random= new Random();
         for(int id=0;id<K;){
             Point point = pointList.get(random.nextInt(pointList.size()));
-            //ÓÃÓÚ±ê¼ÇÊÇ·ñÑ¡Ôñ¹ı¸ÃÊı¾İ
+            //ç”¨äºæ ‡è®°æ˜¯å¦é€‰æ‹©è¿‡è¯¥æ•°æ®
             boolean flag= true;
             for(Cluster cluster:clusterSet){
                 if(cluster.center.equals(point.localArray)){
@@ -141,10 +141,10 @@ public class Kmeans {
     }
 
     /*
-    ÎªÃ¿¸öµã·ÖÅäÒ»¸ö´Ø
+    ä¸ºæ¯ä¸ªç‚¹åˆ†é…ä¸€ä¸ªç°‡
      */
     public void allocCluster(Set<Cluster>clusterSet){
-        //¼ÆËãÃ¿¸öµãµ½K¸öÖĞĞÄµÄ¾àÀë£¬²¢ÇÒÎªÃ¿¸öµã±ê¼Ç´ØºÅ
+        //è®¡ç®—æ¯ä¸ªç‚¹åˆ°Kä¸ªä¸­å¿ƒçš„è·ç¦»ï¼Œå¹¶ä¸”ä¸ºæ¯ä¸ªç‚¹æ ‡è®°ç°‡å·
         for(Point point:pointList){
             double minDis=Integer.MAX_VALUE;
             for(Cluster cluster:clusterSet){
@@ -157,7 +157,7 @@ public class Kmeans {
             }
         }
 
-        //Çå³ıÔ­À´´ØÖĞµÄµã£¬¸üĞÂ´ØÖĞµÄµã
+        //æ¸…é™¤åŸæ¥ç°‡ä¸­çš„ç‚¹ï¼Œæ›´æ–°ç°‡ä¸­çš„ç‚¹
         for(Cluster cluster:clusterSet){
             if(cluster.members!=null){
                 cluster.members.clear();
@@ -171,7 +171,7 @@ public class Kmeans {
     }
 
     /**
-     * ÖØĞÂ¼ÆËãÃ¿¸ö´ØµÄÖĞĞÄÎ»ÖÃ£¬²¢·µ»ØÊÇ·ñÒª¼ÌĞø½øĞĞµü´ú
+     * é‡æ–°è®¡ç®—æ¯ä¸ªç°‡çš„ä¸­å¿ƒä½ç½®ï¼Œå¹¶è¿”å›æ˜¯å¦è¦ç»§ç»­è¿›è¡Œè¿­ä»£
      */
     public boolean updateCluster(Set<Cluster>clusterSet) {
         boolean ifNeedIter= false;
@@ -181,20 +181,20 @@ public class Kmeans {
             double[] aveDimension=new double[bands];
 
             if(pointList!=null){
-                //¸÷bandsÇóºÍ
+                //å„bandsæ±‚å’Œ
                 for(int i=0;i<bands;i++){
                     for(int j=0;j<pointList.size();j++){
                         sumDimension[i]+=pointList.get(j).localArray[i];
                     }
                 }
 
-                //¸÷bands¼ÆËãÆ½¾ùÖµ
+                //å„bandsè®¡ç®—å¹³å‡å€¼
                 for(int i=0;i<bands;i++){
                     aveDimension[i]=sumDimension[i]/pointList.size();
                 }
             }
 
-            //¼ÆËãĞÂ¾ÉÖĞĞÄµÄ¾àÀë
+            //è®¡ç®—æ–°æ—§ä¸­å¿ƒçš„è·ç¦»
             if(disC.getEuclideanDis(cluster.center,new Point(aveDimension))>disDiff){
                 ifNeedIter= true;
             }
@@ -204,11 +204,11 @@ public class Kmeans {
         return ifNeedIter;
     }
 
-    //½øĞĞKmeans
+    //è¿›è¡ŒKmeans
     public int[] run(){
         bands= X.length;
         pixelNum=X[0].length;
-        //Ã¿¸öÏñËØID¶ÔÓ¦µÄÀà±ğ
+        //æ¯ä¸ªåƒç´ IDå¯¹åº”çš„ç±»åˆ«
         int[]K1=new int[pixelNum];
 
         initData();

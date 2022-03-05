@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class DicCon {
     double[][]X;
-    int K; //´ØµÄ¸öÊı
-    int P; //Ã¿´ØÀïÃæÌô³öÀ´µÄÏñËØ¸öÊı
+    int K; //ç°‡çš„ä¸ªæ•°
+    int P; //æ¯ç°‡é‡Œé¢æŒ‘å‡ºæ¥çš„åƒç´ ä¸ªæ•°
     int bands;
     int pixelNum;
 
@@ -14,9 +14,9 @@ public class DicCon {
     }
 
     public double[][] run(){
-        //¹¹ÔìµÄ×Öµä¾ØÕó
+        //æ„é€ çš„å­—å…¸çŸ©é˜µ
         double[][]Dictionary=null;
-        //ËùÓĞpixelµÄclusterID
+        //æ‰€æœ‰pixelçš„clusterID
         int[] K1;
 
         bands= X.length;
@@ -24,13 +24,13 @@ public class DicCon {
         Kmeans kmeans= new Kmeans(X,K);
         K1=kmeans.run();
         for(int i=0;i<K;i++){
-            //Ã¿´ØpointID
+            //æ¯ç°‡pointID
             ArrayList<Integer> st1=new ArrayList<Integer>();
-            //Ã¿´Ø¹¹³ÉµÄ²¿·ÖÍ¼Ïñ
+            //æ¯ç°‡æ„æˆçš„éƒ¨åˆ†å›¾åƒ
             double[][]temp;
-            //RxDetectorµÄÖµ
+            //RxDetectorçš„å€¼
             double[]kr;
-            //ÅÅĞòºóµÄkr
+            //æ’åºåçš„kr
             int[] d2;
 
             for(int j=0;j<K1.length;j++){

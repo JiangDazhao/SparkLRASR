@@ -2,7 +2,6 @@ import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 import scala.Tuple2;
 
-import javax.swing.text.StyleContext;
 
 public class LADMAP_LRASR {
     double[][]X;
@@ -10,7 +9,7 @@ public class LADMAP_LRASR {
     double lambda;
     double beta;
 
-    double tol=1e-6;
+    double tol=1e-2;
     double tol2=1e-2;
     double maxIter=1e6;
     int d;
@@ -51,26 +50,6 @@ public class LADMAP_LRASR {
         init();
         int iter=0;
         while (iter<maxIter){
-            double[][]sk= new double[S.length][S[0].length];
-            double[][]jk= new double[J.length][J[0].length];
-            double[][]ek= new double[E.length][E[0].length];
-            for(int i=0;i<S.length;i++){
-                for(int j=0;j<S[0].length;j++){
-                    sk[i][j]=S[i][j];
-                }
-            }
-            for(int i=0;i<J.length;i++){
-                for(int j=0;j<J[0].length;j++){
-                    jk[i][j]=J[i][j];
-                }
-            }
-            for(int i=0;i<E.length;i++){
-                for(int j=0;j<E[0].length;j++){
-                    ek[i][j]=E[i][j];
-                }
-            }
-            iter++;
-
             Matrix tempMatrix;
             Matrix temp2Matrix;
             Matrix SMatrix;
@@ -79,11 +58,12 @@ public class LADMAP_LRASR {
 
             Matrix XMatrix= new Matrix(X);
             Matrix AMatrix= new Matrix(A);
-            Matrix skMatrix= new Matrix(sk);
-            Matrix ekMatrix= new Matrix(ek);
+            Matrix skMatrix= new Matrix(S);
+            Matrix ekMatrix= new Matrix(E);
+            Matrix jkMatrix= new Matrix(J);
+
             Matrix Y1Matrix= new Matrix(Y1);
             Matrix Y2Matrix= new Matrix(Y2);
-            Matrix jkMatrix= new Matrix(jk);
             Matrix tempMinus1=AMatrix.transpose().times(XMatrix.minus(AMatrix.times(skMatrix)).
                     minus(ekMatrix).plus(Y1Matrix.times(1.0/mu)));
             Matrix tempMinus2=skMatrix.minus(jkMatrix).plus(Y2Matrix.times(1.0/mu));
@@ -95,37 +75,34 @@ public class LADMAP_LRASR {
 
             // X=U*S*V^T --> Ucopy Scopy Vcopy
             // X^T=V*S^T*U^T -->  Output U=V  Output S=S Output V=U
-            UMatrix= new SingularValueDecomposition(tempMatrix.transpose()).getV();
-            SingularMatrix= new SingularValueDecomposition(tempMatrix.transpose()).getS();
-            VMatrix= new SingularValueDecomposition(tempMatrix.transpose()).getU();
-
-
-            double[] sigma = new double[SingularMatrix.getRowDimension()];
-            for(int i=0;i<SingularMatrix.getRowDimension();i++){
-                sigma[i]=SingularMatrix.get(i,i);
+            // *************have some problems
+            if(tempMatrix.getRowDimension()<tempMatrix.getColumnDimension()){
+                tempMatrix=tempMatrix.transpose();
             }
+            UMatrix= new SingularValueDecomposition(tempMatrix).getV();
+            SingularMatrix= new SingularValueDecomposition(tempMatrix).getS();
+            VMatrix= new SingularValueDecomposition(tempMatrix).getU();
+
+
+            int sigmaLength=SingularMatrix.getRowDimension();
             int svp=0;
-            for(int i=0;i<sigma.length;i++){
-                double jud= sigma[i]-1.0/(mu*ita1);
-                if(jud>0) svp++;
+            for(int i=0;i<sigmaLength;i++){
+                double jud= SingularMatrix.get(i,i)-1.0/(mu*ita1);
+                if(jud>0) {
+                    svp++;
+                }
             }
 
             double [][]diagSigma;
             if(svp>=1){
-                for(int i=0;i<svp;i++){
-                    sigma[i]=sigma[i]-1.0/(mu*ita1);
-                }
                 diagSigma= new double[svp][svp];
                 for(int i=0;i<svp;i++){
-                    diagSigma[i][i]=sigma[i];
+                    diagSigma[i][i]=SingularMatrix.get(i,i)-1.0/(mu*ita1);
                 }
             }
             else {
                 svp=1;
                 diagSigma= new double[svp][svp];
-                for(int i=0;i<svp;i++){
-                    diagSigma[i][i]=0;
-                }
             }
 
             int[] svpIndex= new int[svp];
@@ -138,6 +115,9 @@ public class LADMAP_LRASR {
 
             Matrix diagSigmaMatrix= new Matrix(diagSigma);
             SMatrix=UMatrixSvp.times(diagSigmaMatrix).times(VMatrixSvp.transpose());
+            //Update S
+            S= SMatrix.getArrayCopy();
+
 
             //Update J
             temp2Matrix=SMatrix.plus(Y2Matrix.times(1.0/mu));
@@ -171,8 +151,7 @@ public class LADMAP_LRASR {
             stopC2Down=XMatrix.normF();
             stopC2=stopC2Up/stopC2Down;
 
-            System.out.println("iter="+iter+" stopC="+stopC+" stopC2="+stopC2);
-
+            System.out.println("iter="+iter+" stopC="+stopC+" stopC2="+stopC2+" mu="+Math.min(max_mu,mu*rho));
 
             if(stopC<tol&&stopC2<tol2){
                 break;
@@ -181,7 +160,9 @@ public class LADMAP_LRASR {
                 Y2Matrix=Y2Matrix.plus(leq2Matrix.times(mu));
                 mu= Math.min(max_mu,mu*rho);
             }
+            iter++;
         }
         return new Tuple2<>(S,E);
     }
+
 }

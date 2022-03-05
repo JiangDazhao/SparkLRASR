@@ -11,14 +11,18 @@ public class main {
         int K=15;
         int P=20;
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//璁剧疆鏃ユ湡鏍煎紡
         System.out.println("start time:"+df.format(new Date()));
 
         double t1=System.currentTimeMillis();
-        Data data = new Data("img2D.mat");
+        Data data = new Data("img2D.mat","UGt.mat");
         double[][] X;
+        double[][] GT;
         double[][] Dic;
         X=data.img2D;
+        GT=data.GT;
+//        System.out.println("X data="+X.length+" "+X[0].length);
+//        System.out.println("GT data="+GT.length+" "+GT[0].length);
         double t2=System.currentTimeMillis();
         System.out.println("ReadData time:"+(t2-t1)*1.0/1000+"s");
         System.out.println("ReadData Finish:"+df.format(new Date()));
@@ -40,7 +44,23 @@ public class main {
 
         double[][]S= SE._1;
         double[][]E= SE._2;
-        System.out.println(S.length+" "+S[0].length);
-        System.out.println(E.length+" "+E[0].length);
+//        System.out.println(S.length+" "+S[0].length);
+//        System.out.println(E.length+" "+E[0].length);
+
+        double t7=System.currentTimeMillis();
+        double[][]re= new double[GT.length][GT[0].length];
+        for(int i=0;i<E[0].length;i++){
+            double sum=0;
+            for(int j=0;j<E.length;j++){
+                sum+=Math.pow(E[j][i],2);
+            }
+            re[i%GT.length][i/GT.length]=Math.sqrt(sum);
+        }
+        AUC auc = new AUC(GT,re);
+        double aucresult= auc.run();
+        System.out.println("AUC="+aucresult);
+        double t8=System.currentTimeMillis();
+        System.out.println("AUC time:"+(t8-t7)*1.0/1000+"s");
+        System.out.println("AUC Finish:"+df.format(new Date()));
     }
 }

@@ -2,8 +2,8 @@ import Jama.Matrix;
 
 public class RxDetector {
     double[][]M;
-    int p; //¾ØÕóĞĞ£¬bands
-    int N; //¾ØÕóÁĞ£¬pixels
+    int p; //çŸ©é˜µè¡Œï¼Œbands
+    int N; //çŸ©é˜µåˆ—ï¼Œpixels
     public RxDetector(double[][] m) {
         this.M = m;
     }
@@ -45,7 +45,7 @@ public class RxDetector {
         Matrix eyeMatrix= Matrix.identity(p,p);
         Matrix sigmaMatrix= new Matrix(sigma);
         Matrix invTemp= sigmaMatrix.plus(eyeMatrix.times(delta));
-        // have some problems
+// **************have some problems
         Matrix sigmaInvMatrix= invTemp.inverse();
 //        for(int i=0;i<sigmaInvMatrix.getRowDimension();i++){
 //            for(int j=0;j<sigmaInvMatrix.getColumnDimension();j++){

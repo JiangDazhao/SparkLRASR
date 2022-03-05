@@ -1,8 +1,8 @@
 import java.util.*;
 
 public class Sort {
-    double[] list;//ÒªÅÅĞòµÄÊı×é
-    int [] idResult; //ÅÅĞòºóµÄÊı×é
+    double[] list;//è¦æ’åºçš„æ•°ç»„
+    int [] idResult; //æ’åºåçš„æ•°ç»„
     int listLen;
 
     public Sort(double[] list) {
@@ -19,7 +19,7 @@ public class Sort {
         }
     }
 
-    //·â×°Êı×é
+    //å°è£…æ•°ç»„
     public LinkedList<RXElement> initData(){
         listLen= list.length;
         LinkedList<RXElement> RXList= new LinkedList<RXElement>();
@@ -29,8 +29,9 @@ public class Sort {
         return RXList;
     }
 
-    //ÊµÏÖÅÅĞòÆ÷
+    //å®ç°æ’åºå™¨
     public static class RXElementComparator implements Comparator<RXElement>{
+        @Override
         public int compare(RXElement o1, RXElement o2) {
             double val=o1.rxValue-o2.rxValue;
             if(val>0){
