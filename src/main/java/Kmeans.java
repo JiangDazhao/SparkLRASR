@@ -33,13 +33,16 @@ public class Kmeans {
             this.localArray=localArray;
         }
         //用于之后的随机化重复判断
+        @Override
         public boolean equals(Object obj){
-            if (obj == null || getClass() != obj.getClass())
+            if (obj == null || getClass() != obj.getClass()) {
                 return false;
+            }
 
             Point point = (Point) obj;
-            if (point.localArray.length != localArray.length)
+            if (point.localArray.length != localArray.length) {
                 return false;
+            }
 
             for (int i = 0; i < localArray.length; i++) {
                 if (Double.compare(point.localArray[i], localArray[i]) != 0) {

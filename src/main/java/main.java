@@ -19,8 +19,8 @@ public class main {
         double[][] X;
         double[][] GT;
         double[][] Dic;
-        X=data.img2D;
-        GT=data.GT;
+        X=data.getImg2D();
+        GT=data.getGT();
 //        System.out.println("X data="+X.length+" "+X[0].length);
 //        System.out.println("GT data="+GT.length+" "+GT[0].length);
         double t2=System.currentTimeMillis();
