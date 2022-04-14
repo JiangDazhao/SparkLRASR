@@ -178,6 +178,7 @@ public class Kmeans {
      */
     public boolean updateCluster(Set<Cluster>clusterSet) {
         boolean ifNeedIter= false;
+        // 计算两个新、旧中心的距离，如果任意一个类中心移动的距离大于dis_diff则继续迭代。
         for(Cluster cluster:clusterSet){
             List<Point>pointList=cluster.members;
             double[] sumDimension=new double[bands];
@@ -218,7 +219,9 @@ public class Kmeans {
         Set<Cluster> clusterSet = initClusterCenter();
         boolean ifNeedIter= true;
         while (ifNeedIter&&iterRunTimes<=iterMaxTimes){
+            //重新分配每个点的簇号并更新簇
             allocCluster(clusterSet);
+            //计算每个簇的新节点，并更新，同时返回是否需要继续迭代
             ifNeedIter= updateCluster(clusterSet);
             iterRunTimes++;
         }

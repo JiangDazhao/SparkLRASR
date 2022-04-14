@@ -5,7 +5,7 @@ import org.apache.hadoop.fs.Path;
 import java.io.*;
 import java.net.URI;
 
-public class HeadHdr {
+public class HeadHdr implements Serializable{
     //从hdr头文件中读出来的参数
     private String name;
     private String path;
@@ -13,7 +13,8 @@ public class HeadHdr {
     private int GTRow;
     private int GTCol;
     private int bands;
-    private short datatype;
+    private int parallelnum;
+    private int datatype;
     private double lambda;
     private double beta;
     private int K;
@@ -57,6 +58,8 @@ public class HeadHdr {
                         this.GTCol = Integer.parseInt(strright);
                     }else if (strleft.equals("bands")) {
                         this.bands = Integer.parseInt(strright);
+                    }else if (strleft.equals("parallelnum")) {
+                        this.parallelnum = Integer.parseInt(strright);
                     } else if (strleft.equals("data type")) {
                         this.datatype = Short.parseShort(strright);
                     }else if (strleft.equals("lambda")) {
@@ -93,7 +96,11 @@ public class HeadHdr {
         return bands;
     }
 
-    public short getDatatype() {
+    public int getParallelnum() {
+        return parallelnum;
+    }
+
+    public int getDatatype() {
         return datatype;
     }
 
@@ -105,11 +112,11 @@ public class HeadHdr {
         return beta;
     }
 
-    public double getK() {
+    public int getK() {
         return K;
     }
 
-    public double getP() {
+    public int getP() {
         return P;
     }
 }

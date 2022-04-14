@@ -11,11 +11,12 @@ public class main {
         int K=15;
         int P=20;
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        //设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println("start time:"+df.format(new Date()));
 
         double t1=System.currentTimeMillis();
-        Data data = new Data("img2D.mat","UGt.mat");
+        Data data = new Data("img2D.mat", "GtUrban.mat");
         double[][] X;
         double[][] GT;
         double[][] Dic;

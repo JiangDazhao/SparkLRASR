@@ -9,7 +9,7 @@ public class LADMAP_LRASR {
     double lambda;
     double beta;
 
-    double tol=1e-2;
+    double tol=1e-6;
     double tol2=1e-2;
     double maxIter=1e6;
     int d;

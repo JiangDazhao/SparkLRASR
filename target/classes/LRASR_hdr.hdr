@@ -4,6 +4,7 @@ ENVI
  GTRow   = 80
  GTCol   = 100
  bands   = 162
+ parallelnum=4
  data type = 4
  lambda = 0.1
  beta = 0.1

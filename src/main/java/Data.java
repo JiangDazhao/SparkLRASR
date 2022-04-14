@@ -28,7 +28,7 @@ public class Data {
         this.img2D= new double[imgRows][imgCols];
         for(int i=0;i<imgRows;i++){
             for(int j=0;j<imgCols;j++){
-                this.img2D[i][j]=Matriximg2D.getAsDouble(i,j);
+                this.img2D[i][j]=Matriximg2D.getAsFloat(i,j);
             }
         }
 
@@ -40,7 +40,7 @@ public class Data {
         this.GT= new double[GTRows][GTCols];
         for(int i=0;i<GTRows;i++){
             for(int j=0;j<GTCols;j++){
-                this.GT[i][j]=MatrixGT.getAsDouble(i,j);
+                this.GT[i][j]=MatrixGT.getAsFloat(i,j);
             }
         }
     }

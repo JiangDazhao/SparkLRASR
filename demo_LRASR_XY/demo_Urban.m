@@ -35,6 +35,8 @@ M = reshape(M, no_lines*no_rows, no_bands).';
 M = M./max(M(:));% normalize to 0~1
 X = M;
 %clear M
+%load readoutfloatImg.mat
+%X=readoutfloatImg
 
 % Dictionary construction
 Dic = DicCon(X, K, P);
@@ -51,7 +53,7 @@ axis image
 title('LRASR for Urban data')
 % plot ROC curve and calculate AUC
 [tpr,fpr,thresholds] = roc(GT(:)',re(:)');
-AUC = trapz(fpr,tpr);
+AUC = trapz(fpr,tpr)
 figure
 plot(fpr,tpr,'-')
 xlabel('false alarm rate')
