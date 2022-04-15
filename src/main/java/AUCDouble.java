@@ -1,12 +1,12 @@
 import java.util.*;
 
-public class AUC {
-    private float[][] intput1;
+public class AUCDouble {
+    private double[][] intput1;
     private double[][] intput2;
     private double[] GT;
     private double[] re;
 
-    public AUC(float[][] intput1, double[][] intput2) {
+    public AUCDouble(double[][] intput1, double[][] intput2) {
         this.intput1 = intput1;
         this.intput2 = intput2;
     }

@@ -57,7 +57,7 @@ public class main {
             }
             re[i%GT.length][i/GT.length]=Math.sqrt(sum);
         }
-        AUC auc = new AUC(GT,re);
+        AUCDouble auc = new AUCDouble(GT,re);
         double aucresult= auc.run();
         System.out.println("AUC="+aucresult);
         double t8=System.currentTimeMillis();

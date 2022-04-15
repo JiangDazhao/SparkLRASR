@@ -1,7 +1,10 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
-object testKmeansMR {
+object testMR {
   def main(args: Array[String]): Unit = {
       val conf= new SparkConf()
         .setAppName("JavaParallelTest")
@@ -58,19 +61,9 @@ object testKmeansMR {
               (6000,array4)),
           4).cache()
 
-      val total: Array[Array[Float]] = Array.ofDim[Float](bands,8000);
-      for(i<- 0 until 8000){
-          for(j<- 0 until bands){
-              total(j)(i)=X(j)(i);
-          }
-      }
-
-      val img2DRDD_img: RDD[Array[Float]] =spark.parallelize(
-          total,4
-      )
-      img2DRDD_img.map(points=>{
-
-      })
+      //设置日期格式
+      val df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+      System.out.println("start time:" + df.format(new Date))
 
       val kmeansMR = new KmeansMR(img2DRDD, broadcastHeader)
       kmeansMR.process()
@@ -86,5 +79,27 @@ object testKmeansMR {
       dicConMR.process()
      // val partDicCollect=dicConMR.getpartDicCollect
       val fullDic=dicConMR.getFullDic
+
+      val broadFullDic= spark.broadcast(fullDic)
+      val lrasrmr = new LRASRMR(img2DRDD, broadcastHeader, broadFullDic)
+      lrasrmr.process()
+      val fullE: Array[Array[Double]] = lrasrmr.getFullE
+
+      val t7 = System.currentTimeMillis
+      val re = Array.ofDim[Double](GT.length, GT(0).length)
+      for (i <- 0 until fullE(0).length) {
+          var sum = 0.0
+          for (j <- 0 until fullE.length) {
+              sum += Math.pow(fullE(j)(i), 2)
+          }
+          re(i % GT.length)(i / GT.length) = Math.sqrt(sum)
+      }
+
+      val auc = new AUC(GT, re)
+      val aucresult = auc.run
+      System.out.println("AUC=" + aucresult)
+      val t8 = System.currentTimeMillis
+      System.out.println("AUC time:" + (t8 - t7) * 1.0 / 1000 + "s")
+      System.out.println("AUC Finish:" + df.format(new Date))
   }
 }

@@ -9,7 +9,7 @@ public class LADMAP_LRASR {
     double lambda;
     double beta;
 
-    double tol=1e-6;
+    double tol=1e-2;
     double tol2=1e-2;
     double maxIter=1e6;
     int d;
@@ -151,7 +151,7 @@ public class LADMAP_LRASR {
             stopC2Down=XMatrix.normF();
             stopC2=stopC2Up/stopC2Down;
 
-            System.out.println("iter="+iter+" stopC="+stopC+" stopC2="+stopC2+" mu="+Math.min(max_mu,mu*rho));
+            System.out.println("iter="+iter+" stopC(tol)="+stopC+" stopC2(tol2)="+stopC2+" mu="+Math.min(max_mu,mu*rho));
 
             if(stopC<tol&&stopC2<tol2){
                 break;

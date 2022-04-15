@@ -10,7 +10,8 @@ object LRASRMain {
     val jobname=args(1)   //jobname and the filename
     val filepath=args(2)  //the hadoop directory of all the data
 
-    val  conf= new SparkConf().setMaster(exetype).setAppName(jobname).set("spark.testing.memory", "2147480000")
+    val  conf= new SparkConf().setMaster(exetype).setAppName(jobname)
+      .set("spark.testing.memory", "2147480000")
     val spark= new SparkContext(conf)
 
     //set data format

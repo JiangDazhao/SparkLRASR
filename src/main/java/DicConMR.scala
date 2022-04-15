@@ -3,7 +3,7 @@ import org.apache.spark.rdd.RDD
 
 class DicConMR(val ClassPixelRDD: RDD[(Int, Array[Float])],val headHdr: Broadcast[HeadHdr])extends Serializable {
   var partDicCollect: Array[(Int,Array[Array[Double]])]=_
-  var fullDic:Array[Array[Float]]=_
+  var fullDic:Array[Array[Double]]=_
 
   private[this] def processDicCon:Unit={
     partDicCollect =ClassPixelRDD.mapPartitions(pixels=>{
@@ -51,7 +51,7 @@ class DicConMR(val ClassPixelRDD: RDD[(Int, Array[Float])],val headHdr: Broadcas
       val partSizeDic=partDicCollect(i)
       dicNum+=partSizeDic._1
     }
-    fullDic= Array.ofDim[Float](headHdr.value.getBands,dicNum)
+    fullDic= Array.ofDim[Double](headHdr.value.getBands,dicNum)
     var accumulateNum=0
     for(i<-0 until partDicCollect.length){
       val partSizeDic=partDicCollect(i)
@@ -59,7 +59,7 @@ class DicConMR(val ClassPixelRDD: RDD[(Int, Array[Float])],val headHdr: Broadcas
       val partDic=partSizeDic._2
       for(partId<-0 until(partSize)){
         for(band<-0 until(headHdr.value.getBands)){
-          fullDic(band)(accumulateNum+partId)=partDic(band)(partId).toFloat
+          fullDic(band)(accumulateNum+partId)=partDic(band)(partId)
         }
       }
       accumulateNum+=partSize
