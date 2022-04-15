@@ -58,7 +58,11 @@ object LRASRMain {
     val broadcastCenter= spark.broadcast(kmeansCenter)
     val repartition= new Repartition(img2DRDD,broadcastHeader,broadcastCenter)
     repartition.process()
-    val ClassPixelRDD=repartition.getClassPixelRDD
+    val ClassPixelRDD: RDD[(Int, Array[Float])] =repartition.getClassPixelRDD
+
+    val dicConMR = new DicConMR(ClassPixelRDD, broadcastHeader)
+    dicConMR.process()
+    val fullDic=dicConMR.getFullDic
 
 
   }

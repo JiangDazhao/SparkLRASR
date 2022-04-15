@@ -80,6 +80,11 @@ object testKmeansMR {
       val repartition= new Repartition(img2DRDD,broadcastHeader,broadcastCenter)
       repartition.process()
       val ClassPixelRDD=repartition.getClassPixelRDD
+//      val PartitionInner=repartition.getPartitionInner
 
+      val dicConMR = new DicConMR(ClassPixelRDD, broadcastHeader)
+      dicConMR.process()
+     // val partDicCollect=dicConMR.getpartDicCollect
+      val fullDic=dicConMR.getFullDic
   }
 }

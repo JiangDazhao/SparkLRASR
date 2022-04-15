@@ -7,8 +7,9 @@ class Repartition(val blockImgTotal:RDD[(Int,Array[Array[Float]])],val headHdr: 
   @transient
   var sparkContext: SparkContext = blockImgTotal.sparkContext
   var ClassPixelRDD:RDD[(Int, Array[Float])] = _
+
 //  var CollectedClassPixelRDD:Array[(Int, Array[Float])]=_
-//  var partitionInner: Any =_
+  var partitionInner: Any =_
 
   private[this] def processRepartitionRDD = {
     ClassPixelRDD = blockImgTotal.flatMap(f = blockImg => {
@@ -42,7 +43,7 @@ class Repartition(val blockImgTotal:RDD[(Int,Array[Array[Float]])],val headHdr: 
     }
     ).partitionBy(
       new ClassPartitioner(headHdr.value.getK)
-    )
+    ).cache()
 
 
 //    partitionInner=ClassPixelRDD.mapPartitionsWithIndex{
@@ -68,7 +69,7 @@ class Repartition(val blockImgTotal:RDD[(Int,Array[Array[Float]])],val headHdr: 
 
   def getClassPixelRDD=ClassPixelRDD
   //def getCollectedClassPixelRDD =CollectedClassPixelRDD
-//  def getPartitionInner=partitionInner
+  def getPartitionInner=partitionInner
 
 
   class ClassPartitioner(numParts: Int) extends Partitioner {

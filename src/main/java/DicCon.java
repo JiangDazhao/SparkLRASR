@@ -13,6 +13,7 @@ public class DicCon {
         this.P = p;
     }
 
+    //直接返回全局下的字典
     public double[][] run(){
         //构造的字典矩阵
         double[][]Dictionary=null;
@@ -22,7 +23,7 @@ public class DicCon {
         bands= X.length;
         pixelNum=X[0].length;
         Kmeans kmeans= new Kmeans(X,K);
-        K1=kmeans.run();
+        K1=kmeans.run();// K1为所有像素的类别
         for(int i=0;i<K;i++){
             //每簇pointID
             ArrayList<Integer> st1=new ArrayList<Integer>();
@@ -33,6 +34,7 @@ public class DicCon {
             //排序后的kr
             int[] d2;
 
+            //从原图像X中挑选出每个类别的所有图像生成temp，若不满P=20则直接忽略该类别
             for(int j=0;j<K1.length;j++){
                 if(K1[j]==i){
                     st1.add(j);
@@ -48,20 +50,26 @@ public class DicCon {
                     }
                 }
             }
+
+            //返回temp图像每个pixel的RX值
             RxDetector rxDetector= new RxDetector(temp);
             kr=rxDetector.run();
+
+            //kr放入并从0开始重新标号，RX升序排列，同时返回该pixel在temp中的index
             Sort sort= new Sort(kr);
             d2=sort.run();
-//            System.out.println("d2 length"+d2.length);
 
+            //如果是第一份字典则创建
             if(Dictionary==null){
                 Dictionary= new double[bands][P];
                 for(int iii=0;iii<bands;iii++){
                     for(int jjj=0;jjj<P;jjj++){
+                        //从temp中取出对应的id
                         Dictionary[iii][jjj]=temp[iii][d2[jjj]];
                     }
                 }
             }else {
+                //否则进行拼接生成新的
                 double[][] preDic=new double[bands][Dictionary[0].length];
                 for(int iii=0;iii<bands;iii++){
                     for(int jjj=0;jjj<Dictionary[0].length;jjj++){
