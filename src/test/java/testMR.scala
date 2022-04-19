@@ -1,6 +1,7 @@
 import java.text.SimpleDateFormat
 import java.util.Date
 
+import com.jxz.{AUC, DataFloat, DicConMR, HeadHdr, KmeansMR, LRASRMR, Repartition}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -12,7 +13,7 @@ object testMR {
         .set("spark.testing.memory", "2147480000")
       val spark=new SparkContext(conf)
 
-      val header= new HeadHdr("LRASR","./src/main/resources/")
+      val header= new HeadHdr("Urban","./src/com.jxz.main/resources/")
       val broadcastHeader= spark.broadcast(header)
       val samples=header.getSamples
       val bands = header.getBands
@@ -25,7 +26,7 @@ object testMR {
       val K = header.getK
       val P = header.getP
 
-      val data = new DataFloat("img2D.mat", "GtUrban.mat")
+      val data = new DataFloat("Urban_img.mat", "Urban_gt.mat")
       val  X = data.getImg2D
       val GT = data.getGT
 

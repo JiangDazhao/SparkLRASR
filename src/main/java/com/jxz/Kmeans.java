@@ -1,3 +1,5 @@
+package com.jxz;
+
 import java.util.*;
 
 public class Kmeans {

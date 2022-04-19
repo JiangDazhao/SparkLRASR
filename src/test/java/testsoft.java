@@ -1,4 +1,5 @@
 import Jama.Matrix;
+import com.jxz.soft;
 
 public class testsoft {
     public static void main(String[] args) {

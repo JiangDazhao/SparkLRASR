@@ -1,3 +1,5 @@
+import com.jxz.Sort;
+
 public class testSort {
     public static void main(String[] args) {
         double[] list={5,3,1,2};

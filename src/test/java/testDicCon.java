@@ -1,10 +1,13 @@
+import com.jxz.Data;
+import com.jxz.DicCon;
+
 import java.io.IOException;
 
 public class testDicCon {
     public static void main(String[] args) throws IOException {
         int K=15;
         int P=20;
-        Data data = new Data("img2D.mat", "GtUrban.mat");
+        Data data = new Data("Urban_img.mat", "Urban_gt.mat");
         double[][] res;
         DicCon dicCon= new DicCon(data.img2D,K,P);
         res=dicCon.run();

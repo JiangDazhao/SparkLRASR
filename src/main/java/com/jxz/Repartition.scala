@@ -1,6 +1,8 @@
-import org.apache.spark.{Partitioner, SparkContext}
+package com.jxz
+
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
+import org.apache.spark.{Partitioner, SparkContext}
 
 class Repartition(val blockImgTotal:RDD[(Int,Array[Array[Float]])],val headHdr: Broadcast[HeadHdr],val center:Broadcast[Array[Array[Float]]]) extends Serializable {
   var repartitionRDD: RDD[(Int, Array[Float])] = _

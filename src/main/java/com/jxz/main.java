@@ -1,3 +1,5 @@
+package com.jxz;
+
 import scala.Tuple2;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ public class main {
         System.out.println("start time:"+df.format(new Date()));
 
         double t1=System.currentTimeMillis();
-        Data data = new Data("img2D.mat", "GtUrban.mat");
+        Data data = new Data("Urban_img.mat", "Urban_gt.mat");
         double[][] X;
         double[][] GT;
         double[][] Dic;
@@ -32,8 +34,8 @@ public class main {
         DicCon dicCon= new DicCon(X,K,P);
         Dic=dicCon.run();
         double t4=System.currentTimeMillis();
-        System.out.println("DicCon time:"+(t4-t3)*1.0/1000+"s");
-        System.out.println("DicCon Finish:"+df.format(new Date()));
+        System.out.println("com.jxz.DicCon time:"+(t4-t3)*1.0/1000+"s");
+        System.out.println("com.jxz.DicCon Finish:"+df.format(new Date()));
 
         double t5=System.currentTimeMillis();
         LADMAP_LRASR ladmap_lrasr= new LADMAP_LRASR(X,Dic,lambda,beta);
@@ -59,9 +61,9 @@ public class main {
         }
         AUCDouble auc = new AUCDouble(GT,re);
         double aucresult= auc.run();
-        System.out.println("AUC="+aucresult);
+        System.out.println("com.jxz.AUC="+aucresult);
         double t8=System.currentTimeMillis();
-        System.out.println("AUC time:"+(t8-t7)*1.0/1000+"s");
-        System.out.println("AUC Finish:"+df.format(new Date()));
+        System.out.println("com.jxz.AUC time:"+(t8-t7)*1.0/1000+"s");
+        System.out.println("com.jxz.AUC Finish:"+df.format(new Date()));
     }
 }

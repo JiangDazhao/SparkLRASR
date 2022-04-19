@@ -1,8 +1,10 @@
+import com.jxz.Data;
+
 import java.io.IOException;
 
 public class testData {
     public static void main(String[] args) throws IOException {
-        Data data = new Data("img2D.mat", "GtUrban.mat");
+        Data data = new Data("Urban_img.mat", "Urban_gt.mat");
         double [][]img2D= data.getImg2D();
         System.out.println("img2D row="+img2D.length+" img2D col="+img2D[0].length);
         double [][]GT= data.getGT();

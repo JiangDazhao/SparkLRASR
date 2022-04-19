@@ -1,3 +1,5 @@
+package com.jxz;
+
 import org.ujmp.core.Matrix;
 import org.ujmp.jmatio.ImportMatrixMAT;
 
@@ -15,8 +17,8 @@ public class DataFloat {
     float [][]GT;
 
     public DataFloat(String img2DPath, String GTPath) throws IOException {
-        String dataPathName="./src/main/resources/"+img2DPath;
-        String GTPathName="./src/main/resources/"+GTPath;
+        String dataPathName="./src/com.jxz.main/resources/"+img2DPath;
+        String GTPathName="./src/com.jxz.main/resources/"+GTPath;
 
         ImportMatrixMAT testimg = new ImportMatrixMAT();
 

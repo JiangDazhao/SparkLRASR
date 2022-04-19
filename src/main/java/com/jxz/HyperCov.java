@@ -1,3 +1,5 @@
+package com.jxz;
+
 import Jama.Matrix;
 
 public class HyperCov {

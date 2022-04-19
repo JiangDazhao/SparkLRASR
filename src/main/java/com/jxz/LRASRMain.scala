@@ -1,3 +1,5 @@
+package com.jxz
+
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -6,11 +8,10 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 object LRASRMain {
   def main(args: Array[String]): Unit = {
-    val exetype= args(0)
-    val jobname=args(1)   //jobname and the filename
-    val filepath=args(2)  //the hadoop directory of all the data
+    val jobname=args(0)   //jobname and the filename
+    val hdfspath=args(1)  //the hadoop directory of all the data
 
-    val  conf= new SparkConf().setMaster(exetype).setAppName(jobname)
+    val  conf= new SparkConf().setAppName(jobname)
       .set("spark.testing.memory", "2147480000")
     val spark= new SparkContext(conf)
 
@@ -19,24 +20,18 @@ object LRASRMain {
     println("start time:" + df.format(new Date))
 
     // initialize header info
-    val header= new HeadHdr(jobname, filepath)
+    val header= new HeadHdr(jobname, hdfspath)
     val broadcastHeader= spark.broadcast(header)
-    val samples=header.getSamples
     val bands = header.getBands
-    val parallelnum=header.getParallelnum
-    val GTCol = header.getGTCol
-    val GTRow = header.getGTRow
     val datatype = header.getDatatype
-    val lambda = header.getLambda
-    val beta = header.getBeta
-    val K = header.getK
-    val P = header.getP
 
-    val t1 = System.currentTimeMillis
-    println("readdata start time:"+df.format(new Date))
+    // initialize gt
+    val gtDataPath=hdfspath+jobname+ "_gt.bin"
+    val gtData=new GtData(gtDataPath,header)
+    val GT=gtData.getGT
 
     //partition the byteImg2DPath
-    val byteImg2DPath=filepath+"img2D.bin"
+    val byteImg2DPath=hdfspath+jobname+ "_img.bin"
     val byteImg2DRDD: RDD[(Integer, Array[Byte])] =spark.newAPIHadoopFile(byteImg2DPath,classOf[DataInputFormat],classOf[Integer],classOf[Array[Byte]])
 
     // byteImg2DRDD to img2DRDD
@@ -48,9 +43,6 @@ object LRASRMain {
     }
     ).cache()
 
-    val t2 = System.currentTimeMillis
-    println("readdata end time:"+df.format(new Date))
-    println("readdata time:" + (t2 - t1) * 1.0 / 1000 + "s")
 
     val kmeansMR = new KmeansMR(img2DRDD, broadcastHeader)
     kmeansMR.process()
@@ -65,6 +57,24 @@ object LRASRMain {
     dicConMR.process()
     val fullDic=dicConMR.getFullDic
 
+    val broadFullDic= spark.broadcast(fullDic)
+    val lrasrmr = new LRASRMR(img2DRDD, broadcastHeader, broadFullDic)
+    lrasrmr.process()
+    val fullE: Array[Array[Double]] = lrasrmr.getFullE
+
+    val re = Array.ofDim[Double](GT.length, GT(0).length)
+    for (i <- 0 until fullE(0).length) {
+      var sum = 0.0
+      for (j <- 0 until fullE.length) {
+        sum += Math.pow(fullE(j)(i), 2)
+      }
+      re(i % GT.length)(i / GT.length) = Math.sqrt(sum)
+    }
+
+    val auc = new AUC(GT, re)
+    val aucresult = auc.run
+    System.out.println("AUC=" + aucresult)
+    System.out.println("AUC Finish:" + df.format(new Date))
 
   }
 }

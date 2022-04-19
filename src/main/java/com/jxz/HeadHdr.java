@@ -1,3 +1,5 @@
+package com.jxz;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -7,7 +9,7 @@ import java.net.URI;
 
 public class HeadHdr implements Serializable{
     //从hdr头文件中读出来的参数
-    private String name;
+    private String jobname;
     private String path;
     private int samples;
     private int GTRow;
@@ -21,9 +23,9 @@ public class HeadHdr implements Serializable{
     private int P;
 
     //默认构造函数,标识文件名和路径,以及对头文件参数进行读取
-    public HeadHdr(String filename, String path) throws IOException {
+    public HeadHdr(String jobname, String path) throws IOException {
         //文件分割,分出文件名
-        this.name = filename + "_hdr.hdr";//头文件.hdr组装
+        this.jobname = jobname + "_hdr.hdr";//头文件.hdr组装
 
         this.path = path;// 文件所在目录路径
 
@@ -34,9 +36,9 @@ public class HeadHdr implements Serializable{
         /*客户端读取HDFS数据*/
         //返回实例文件系统HDFS的fs
         Configuration conf = new Configuration();
-        FileSystem fs = FileSystem.get(URI.create(this.path + this.name), conf);
+        FileSystem fs = FileSystem.get(URI.create(this.path + this.jobname), conf);
         //有了fs实例后，调用open来获取文件输入流din
-        DataInputStream din = fs.open(new Path(this.path + this.name));
+        DataInputStream din = fs.open(new Path(this.path + this.jobname));
         //客户端对输入流调用read方法
         BufferedReader read = new BufferedReader(new InputStreamReader(din));
 

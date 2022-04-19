@@ -1,4 +1,5 @@
 import Jama.Matrix;
+import com.jxz.HyperCov;
 
 public class testhyperCov {
     public static void main(String[] args) {

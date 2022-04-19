@@ -1,6 +1,6 @@
-function [result, sigma, sigmaInv] = RxDetector(M)
+function [result, sigma, sigmaInv] = com.jxz.RxDetector(M)
 %RX anomaly detector
-%   RxDetector performs the RX anomaly detector
+%   com.jxz.RxDetector performs the RX anomaly detector
 %
 % Usage
 %   [result] = hyperRxDetector(M)

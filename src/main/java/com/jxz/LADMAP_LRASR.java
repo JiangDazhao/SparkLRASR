@@ -1,3 +1,5 @@
+package com.jxz;
+
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 import scala.Tuple2;

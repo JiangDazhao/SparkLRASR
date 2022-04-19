@@ -1,4 +1,4 @@
-function y = soft(x,T)
+function y = com.jxz.soft(x,T)
 
 T = T + eps;
 %y=300*8000
