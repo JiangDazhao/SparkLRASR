@@ -27,19 +27,23 @@ class KmeansMR(val blockImgTotal:RDD[(Int,Array[Array[Float]])],val headHdr: Bro
     initResultCollect =blockImgTotal.map(blockImg => {
       val offset= blockImg._1
       val blockImgData=blockImg._2
-
+      val innerGap=blockImgData(0).length
+      //      println("innerGap="+innerGap)
       var blockResult= new ListBuffer[Array[Float]]
-      for(i<-0 until broadcastInitIndex.value.length){
-        val innerGap=headHdr.value.getSamples/headHdr.value.getParallelnum
-        if(broadcastInitIndex.value(i)>=offset&&broadcastInitIndex.value(i)<offset+innerGap){
-          val selectedPixel= Array.ofDim[Float](headHdr.value.getBands)
-          for(j<-0 until(headHdr.value.getBands)){
-            selectedPixel(j)=blockImgData(j)(broadcastInitIndex.value(i)-offset)
+      val broadcastInitIndexLen=broadcastInitIndex.value.length
+      for(i<-0 until broadcastInitIndexLen){
+        val selectIndex=broadcastInitIndex.value(i)
+        if(selectIndex>=offset&&selectIndex<offset+innerGap){
+          val bands=headHdr.value.getBands
+          val selectedPixel= Array.ofDim[Float](bands)
+          val inBlockIndex=selectIndex-offset
+          for(j<-0 until(bands)){
+            //            println("selectIndex="+selectIndex+" offset"+offset)
+            selectedPixel(j)=blockImgData(j)(inBlockIndex)
           }
           blockResult+=selectedPixel
         }
       }
-
       blockResult
     }).collect()
 
@@ -87,7 +91,6 @@ class KmeansMR(val blockImgTotal:RDD[(Int,Array[Array[Float]])],val headHdr: Bro
           count(pixelClusterId)+=1
           sum(pixelClusterId)=Tools.addPixel(sum(pixelClusterId),pixel)
         }
-
         (sum,count)
       }
       ).reduce((left,right)=>{

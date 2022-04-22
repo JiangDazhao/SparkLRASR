@@ -34,6 +34,7 @@ public class DataRecordReader extends RecordReader<Integer, byte[]> {
     获取当前FileSplit的结束位置
     获取当前FileSplit的文件路径*/
     //isplit是分块的句柄
+    @Override
     public void initialize(InputSplit isplit, TaskAttemptContext context) throws IOException, InterruptedException {
         this.split = (FileSplit)isplit;
         this.flag = true;
@@ -47,10 +48,11 @@ public class DataRecordReader extends RecordReader<Integer, byte[]> {
     }
 
     //判断是否有下一个key/value(block)
+    @Override
     public boolean nextKeyValue() throws IOException, InterruptedException {
         if (this.flag) {
             this.data = new byte[this.length];
-            this.fileIn.read(this.data);
+            this.fileIn.readFully(this.start,this.data,0,this.length);
             this.flag = false;
             return true;
         } else {
@@ -58,18 +60,22 @@ public class DataRecordReader extends RecordReader<Integer, byte[]> {
         }
     }
 
+    @Override
     public Integer getCurrentKey() throws IOException, InterruptedException {
         return this.key;
     }
 
+    @Override
     public byte[] getCurrentValue() throws IOException, InterruptedException {
         return this.data;
     }
 
+    @Override
     public float getProgress() throws IOException, InterruptedException {
         return 0.0F;
     }
 
+    @Override
     public void close() throws IOException {
     }
 }

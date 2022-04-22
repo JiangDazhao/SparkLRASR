@@ -75,15 +75,20 @@ public class LADMAP_LRASR {
             Matrix VMatrix;
             Matrix SingularMatrix;
 
-            // X=U*S*V^T --> Ucopy Scopy Vcopy
-            // X^T=V*S^T*U^T -->  Output U=V  Output S=S Output V=U
+            // X=U*S*(V^T)--> Ucopy Scopy Vcopy
+            // X^T=V*(S^T)*(U^T) -->  Output U=V  Output S=S Output V=U
             // *************have some problems
             if(tempMatrix.getRowDimension()<tempMatrix.getColumnDimension()){
                 tempMatrix=tempMatrix.transpose();
+                UMatrix= new SingularValueDecomposition(tempMatrix).getV();
+                SingularMatrix= new SingularValueDecomposition(tempMatrix).getS();
+                VMatrix= new SingularValueDecomposition(tempMatrix).getU();
             }
-            UMatrix= new SingularValueDecomposition(tempMatrix).getV();
-            SingularMatrix= new SingularValueDecomposition(tempMatrix).getS();
-            VMatrix= new SingularValueDecomposition(tempMatrix).getU();
+            else{
+                UMatrix= new SingularValueDecomposition(tempMatrix).getU();
+                SingularMatrix= new SingularValueDecomposition(tempMatrix).getS();
+                VMatrix= new SingularValueDecomposition(tempMatrix).getV();
+            }
 
 
             int sigmaLength=SingularMatrix.getRowDimension();

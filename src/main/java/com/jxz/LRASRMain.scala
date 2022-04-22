@@ -12,7 +12,10 @@ object LRASRMain {
     val hdfspath=args(1)  //the hadoop directory of all the data
 
     val  conf= new SparkConf().setAppName(jobname)
-      .set("spark.testing.memory", "2147480000")
+//      .setMaster("local[2]")
+//      .set("spark.testing.memory", "2147480000")
+//      .set("spark.driver.memory", "2147480000")
+//      .set("spark.driver.maxResultSize","2147480000")
     val spark= new SparkContext(conf)
 
     //set data format
@@ -33,6 +36,10 @@ object LRASRMain {
     //partition the byteImg2DPath
     val byteImg2DPath=hdfspath+jobname+ "_img.bin"
     val byteImg2DRDD: RDD[(Integer, Array[Byte])] =spark.newAPIHadoopFile(byteImg2DPath,classOf[DataInputFormat],classOf[Integer],classOf[Array[Byte]])
+    //    val byteImg2DRDDCollect=byteImg2DRDD.collect()
+
+    //record time t1
+    val t1 = System.currentTimeMillis
 
     // byteImg2DRDD to img2DRDD
     val img2DRDD: RDD[(Int, Array[Array[Float]])]
@@ -42,11 +49,12 @@ object LRASRMain {
       (blockImg2DId,blockImg2D)
     }
     ).cache()
-
+    println("Read data finish.....")
 
     val kmeansMR = new KmeansMR(img2DRDD, broadcastHeader)
     kmeansMR.process()
     val kmeansCenter= kmeansMR.getCenter
+    println("KmeansMR finish.....")
 
     val broadcastCenter= spark.broadcast(kmeansCenter)
     val repartition= new Repartition(img2DRDD,broadcastHeader,broadcastCenter)
@@ -56,11 +64,16 @@ object LRASRMain {
     val dicConMR = new DicConMR(ClassPixelRDD, broadcastHeader)
     dicConMR.process()
     val fullDic=dicConMR.getFullDic
+    println("dicConMR finish.....")
 
     val broadFullDic= spark.broadcast(fullDic)
     val lrasrmr = new LRASRMR(img2DRDD, broadcastHeader, broadFullDic)
     lrasrmr.process()
     val fullE: Array[Array[Double]] = lrasrmr.getFullE
+
+    //record time t2
+    val t2 = System.currentTimeMillis
+    System.out.println("MapReduce time:" + (t2 - t1) * 1.0 / 1000 + "s")
 
     val re = Array.ofDim[Double](GT.length, GT(0).length)
     for (i <- 0 until fullE(0).length) {
